@@ -21,7 +21,7 @@ class Factory implements \ArrayAccess {
 	}
 
 	function __call($name, $args) {
-		return $this->andThen(self::OP_METHOD, $name, $args ?: false); 
+		return $this->andThen(self::OP_METHOD, $name, $args ?: false);
 	}
 
 	function __get($name) {
@@ -58,10 +58,12 @@ class Factory implements \ArrayAccess {
 
 	// --- ArrayAccess Implementation --- //
 
+	#[\ReturnTypeWillChange]
 	function offsetGet($offset) {
 		return $this->andThen(self::OP_KEY, $offset, null);
 	}
 
+	#[\ReturnTypeWillChange]
 	function offsetExists($offset) {
 		return $this->andThen(self::OP_KEY_EXISTS, [$offset]);
 	}
@@ -72,6 +74,7 @@ class Factory implements \ArrayAccess {
 		return is_array($_) ? array_key_exists($key, $_) : $_->offsetExists($key);
 	}
 
+	#[\ReturnTypeWillChange]
 	function offsetSet($offset, $value) {
 		return $this->andThen(self::OP_SET_KEY, [$offset, $value]);
 	}
@@ -82,6 +85,7 @@ class Factory implements \ArrayAccess {
 		$_[$key] = $val; return $_;
 	}
 
+	#[\ReturnTypeWillChange]
 	function offsetUnset($offset) {
 		return $this->andThen(self::OP_UNSET_KEY, [$offset]);
 	}
